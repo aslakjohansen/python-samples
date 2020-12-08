@@ -26,7 +26,7 @@ $
 
 # paths
 tex_filename      = '%s.tex' % prefix
-pdf_filename      = '%s.pdf' % prefix # TODO: Fails if base is not shared with tex_filename
+pdf_filename      = '%s.pdf' % prefix
 pdf_crop_filename = '%s_crop.pdf' % prefix
 svg_crop_filename = '%s_crop.svg' % prefix
 output_filename   = '%s_result.pdf' % prefix
@@ -35,7 +35,6 @@ output_filename   = '%s_result.pdf' % prefix
 ############################################################# helpers
 
 def system (command, err=STDOUT, out=PIPE):
-    print(command)
     p = Popen(command, shell=True, stderr=err, stdout=out)
     output = p.communicate()[0]
     return output.decode('utf-8') 
@@ -69,13 +68,12 @@ def pdf2svg (ifilename, ofilename):
 
 def embed_svg (ifilename, ofilename):
     handle = rsvg.Handle()
-    h2 = handle.new_from_file(ifilename)
-    print(handle, h2)
-    dims = h2.get_dimensions()
+    svg = handle.new_from_file(ifilename)
+    dims = svg.get_dimensions()
     
     surface = cairo.PDFSurface(ofilename, dims.width, dims.height)
     ctx = cairo.Context(surface)
-    h2.render_cairo(ctx)
+    svg.render_cairo(ctx)
     
     ctx.move_to(0,0)
     ctx.line_to(dims.width, dims.height)
