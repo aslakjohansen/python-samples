@@ -3,6 +3,11 @@
 from subprocess import Popen, STDOUT, PIPE
 from os import linesep
 
+import cairo
+import gi
+gi.require_version('Rsvg', '2.0')
+from gi.repository import Rsvg as rsvg
+
 prefix = 'prefix'
 
 latex = '''
@@ -24,7 +29,7 @@ tex_filename      = '%s.tex' % prefix
 pdf_filename      = '%s.pdf' % prefix # TODO: Fails if base is not shared with tex_filename
 pdf_crop_filename = '%s_crop.pdf' % prefix
 svg_crop_filename = '%s_crop.svg' % prefix
-output_filename   = '%s.svg' % prefix
+output_filename   = '%s_result.pdf' % prefix
 
 #####################################################################
 ############################################################# helpers
@@ -63,7 +68,19 @@ def pdf2svg (ifilename, ofilename):
     system('pdf2svg %s %s' % (ifilename, ofilename))
 
 def embed_svg (ifilename, ofilename):
-    pass
+    handle = rsvg.Handle()
+    h2 = handle.new_from_file(ifilename)
+    print(handle, h2)
+    dims = h2.get_dimensions()
+    
+    surface = cairo.PDFSurface(ofilename, dims.width, dims.height)
+    ctx = cairo.Context(surface)
+    h2.render_cairo(ctx)
+    
+    ctx.move_to(0,0)
+    ctx.line_to(dims.width, dims.height)
+    ctx.set_source_rgb(1, 0, 0)
+    ctx.stroke()
 
 #####################################################################
 ################################################################ main
