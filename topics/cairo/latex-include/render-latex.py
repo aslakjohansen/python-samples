@@ -43,6 +43,9 @@ def write_file (filename, lines):
     with open(filename, 'w') as fo:
         fo.writelines(lines)
 
+#####################################################################
+############################################################### steps
+
 def generate_latex_file (filename, contents):
     lines = [
         '\\documentclass{article}',
