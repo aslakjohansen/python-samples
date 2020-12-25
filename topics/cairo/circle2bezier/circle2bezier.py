@@ -13,12 +13,14 @@ n = 4
 #####################################################################
 ############################################################# helpers
 
-def circ2bezier (x, y, r, n):
+def circ2bezier (x, y, r, n, a0=0, a1=2*pi):
+    if a0==a1: return []
+    
     l = []
-    a0 = 0
-    a1 = 2*pi
+#    a0 = 0
+#    a1 = 2*pi
     astep = (a1 - a0)/n
-    step = r*4.0/3*tan(pi/(2*n))
+    step = r*4.0/3*tan(pi/(2*n)/(2*pi)*(a1-a0))
     
     for i in range(n):
         ai = a0 + i*astep
@@ -42,7 +44,11 @@ height = d*1.2
 width = height/9*16
 cx = width/2
 cy = height/2
-beziers = circ2bezier(cx, cy, r, n)
+#beziers = circ2bezier(cx, cy, r, n)
+#beziers = circ2bezier(cx, cy, r, n, pi/3, 1.5*pi)
+#beziers = circ2bezier(cx, cy, r, n, pi/3)
+#beziers = circ2bezier(cx, cy, r, n, 1.5*pi, pi/3)
+beziers = circ2bezier(cx, cy, r, n, pi/3, -.5*pi)
 
 # canvas
 surface = cairo.PDFSurface(filename, width*2, height*2)
@@ -72,7 +78,6 @@ for bezier in beziers:
     p2 = bezier[2]
     p3 = bezier[3]
     ctx.curve_to(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1])
-ctx.close_path()
 ctx.set_line_width(1)
 ctx.set_source_rgb(1, 0, 0)
 ctx.stroke()
