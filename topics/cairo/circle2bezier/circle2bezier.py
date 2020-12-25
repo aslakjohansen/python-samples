@@ -17,8 +17,6 @@ def circ2bezier (x, y, r, n, a0=0, a1=2*pi):
     if a0==a1: return []
     
     l = []
-#    a0 = 0
-#    a1 = 2*pi
     astep = (a1 - a0)/n
     step = r*4.0/3*tan(pi/(2*n)/(2*pi)*(a1-a0))
     
