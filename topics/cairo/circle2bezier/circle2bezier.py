@@ -62,7 +62,6 @@ for bezier in beziers:
         ctx.set_source_rgb(0, 1, 0)
         ctx.fill()
         ctx.restore()
-#    break
 
 # draw beziers
 ctx.save()
@@ -73,8 +72,7 @@ for bezier in beziers:
     p2 = bezier[2]
     p3 = bezier[3]
     ctx.curve_to(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1])
-#    break
-#ctx.close_path()
+ctx.close_path()
 ctx.set_line_width(1)
 ctx.set_source_rgb(1, 0, 0)
 ctx.stroke()
