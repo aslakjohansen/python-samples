@@ -152,3 +152,6 @@ for i in range(len(data)):
     ctx.restore()
     
 
+print('These do not intersect:')
+print(intersections([(1,0), (2,0), (3,0), (4,0)],
+                    [(1,1), (2,1), (3,1), (4,1)]))
