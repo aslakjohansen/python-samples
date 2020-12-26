@@ -2,7 +2,7 @@
 
 import bezier.curve as bcurve
 import cairo
-from math import pi
+from math import pi, sqrt
 import numpy as np
 
 #####################################################################
@@ -11,6 +11,7 @@ import numpy as np
 filename = 'intersections.pdf'
 width = 1920
 height = width*9/16
+VECTOR_SIZE = 16
 b = 100 # border
 config = (3,2)
 w = width /config[0]-2*b
@@ -102,6 +103,9 @@ def draw_intersections(ctx, points):
         ctx.arc(point[0], point[1], 4, 0, 2*pi)
         ctx.set_source_rgb(0, 0, 1)
         ctx.fill()
+        ctx.move_to(point[0], point[1])
+        ctx.rel_line_to(VECTOR_SIZE*point[2][0], VECTOR_SIZE*point[2][1])
+        ctx.stroke()
         ctx.restore()
 
 def to_np (c):
@@ -110,6 +114,13 @@ def to_np (c):
         [c[0][1], c[1][1], c[2][1], c[3][1]]
     ])
     return nodes
+
+def calc_norm_tangent (c, t):
+    b = bcurve.Curve(to_np(c), 3)
+    v = b.evaluate_hodograph(t)
+    x, y = v[0], v[1]
+    f = 1.0/sqrt(x*x+y*y)
+    return f*x, f*y
 
 def intersections (c1, c2):
     l = []
@@ -120,9 +131,10 @@ def intersections (c1, c2):
     i = b1.intersect(b2)
     for t in i[0]:
         p = b1.evaluate(t)
-        l.append((p[0], p[1]))
+        l.append((p[0], p[1], calc_norm_tangent(c1, t)))
     
     return l
+
 
 #####################################################################
 ################################################################ main
