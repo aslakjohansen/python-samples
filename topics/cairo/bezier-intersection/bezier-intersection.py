@@ -27,6 +27,26 @@ data = [
         'c1': [(b,b+h/2), (b+b,b), (w,b+h), (b+w,b+h/2)],
         'c2': [(b,b+h), (b+w,b), (b,b), (b+w,b+h)],
     },
+    {
+        'offset': (2,0),
+        'c1': [(b,b+h/2), (b+b,b), (w,b+h), (b+w,b+h/2)],
+        'c2': [(b,b+h), (b+w+w,b), (b-w,b), (b+w,b+h)],
+    },
+    {
+        'offset': (0,1),
+        'c1': [(b,h/2+b), (b+w,b), (b+w,b+h), (b,h/2-b)],
+        'c2': [(b,b), (b+w/2,b), (b+w/2,b+h), (b+w,b+h)],
+    },
+    {
+        'offset': (1,1),
+        'c1': [(b,h/2+b), (b+w,b), (b+w,b+h), (b,h/2-b)],
+        'c2': [(b,b+h), (b+w,b), (b,b), (b+w,b+h)],
+    },
+    {
+        'offset': (2,1),
+        'c1': [(b,h/2+b), (b+w,b), (b+w,b+h), (b,h/2-b)],
+        'c2': [(b,b+h), (b+w+w,b), (b-w,b), (b+w,b+h)],
+    },
 ]
 
 #####################################################################
@@ -122,7 +142,7 @@ for i in range(len(data)):
     
     ctx.save()
     ctx.translate(width *(offset[0]%config[0])/config[0],
-                  height*(offset[1]/config[0])/config[1])
+                  height*(offset[1]%config[1])/config[1])
     
     draw_control_points(ctx, c1)
     draw_bezier(ctx, c1)
